@@ -4,11 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Runtime – Calculateur de Pace</title>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="calculator-container">
@@ -19,8 +22,8 @@
     <div class="orbit-container">
       <svg id="orbit-svg" viewBox="0 0 300 150" preserveAspectRatio="xMidYMid meet">
         <g id="orbit-group" transform="rotate(-12 150 75)">
-          <ellipse cx="150" cy="75" rx="120" ry="30" />
-          <circle id="orbit-dot" r="5" />
+          <ellipse cx="150" cy="75" rx="120" ry="30"></ellipse>
+          <circle id="orbit-dot" r="5"></circle>
         </g>
       </svg>
     </div>
@@ -33,32 +36,33 @@
       <button class="distance-button" data-distance="42.195">Marathon</button>
     </div>
 
-    <!-- Pace + slider -->
+    <!-- Slider pace -->
     <div class="pace-slider-container">
       <label class="pace-label" for="pace-slider">
         Pace : <span id="running-pace">--:-- min/km</span>
       </label>
-      <input type="range" id="pace-slider" min="0" max="100" value="40" step="1" />
+      <input type="range" id="pace-slider" min="0" max="100" value="40" step="1">
     </div>
 
     <!-- Résultats -->
     <div class="result-container">
       <div class="result-item">
-        <label>Vitesse :</label>
-        <span id="speed-kmh">-- km/h</span>
+        <label>Vitesse :</label><span id="speed-kmh">-- km/h</span>
       </div>
       <div class="result-item">
-        <label>Temps final :</label>
-        <span id="finish-time">--:--:--</span>
+        <label>Temps final :</label><span id="finish-time">--:--:--</span>
       </div>
     </div>
 
     <button id="save-goal" class="save-button">Enregistrer mon objectif</button>
   </div>
 
-  <!-- Signature -->
+  <!-- Footer -->
   <p class="footer">
-    One of many side projects from <a href="https://siders.club" target="_blank" rel="noopener noreferrer">siders club</a>
+    One of many side projects from
+    <a href="https://siders.club" target="_blank" rel="noopener noreferrer">
+      <span class="highlight">SidersClub</span>
+    </a>
   </p>
 
   <script src="script.js"></script>

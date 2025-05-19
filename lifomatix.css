@@ -1,101 +1,139 @@
-/* ——— Thème noir & blanc “terminal” ——— */
+/* ——— Lifomatix – thème clair moderne ——— */
 :root {
-    --bg-black:  #0A0A0A;
-    --fg-white:  #F5F5F5;
-    --fg-gray:   #AAAAAA;
-    --accent:    #FFFFFF;
-    --grid-dim:  4680;          /* 90 ans × 52 semaines  */
-    --dot-size:  9px;           /* diamètre intérieur    */
-    --dot-gap:   3px;           /* espace entre cercles  */
+  --bg-page:      #f8f8f8;
+  --bg-card:      #ffffff;
+  --txt-main:     #1a1a1a;
+  --txt-muted:    #555;
+  --border:       #ccc;
+  --primary:      #1a1a1a;
+  --radius:       12px;
+
+  /* Grille des semaines */
+  --dot-size: 11px;   /* cercle interne */
+  --dot-gap:  4px;    /* espace entre cercles */
 }
 
-/* Reset */
+/* Reset minimal */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: "Courier New", "IBM Plex Mono", monospace;
-    background: var(--bg-black);
-    color: var(--fg-white);
-    padding: 20px;
-    letter-spacing: 0.4px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-page);
+  color: var(--txt-main);
+  font-family: "Helvetica Neue", sans-serif;
+  padding: 2rem;
 }
 
 /* —— Conteneur principal —— */
 .calculator-container {
-    max-width: 420px;
-    margin: 0 auto;
-    padding: 24px;
-    background: var(--bg-black);
-    border: 1px solid var(--fg-gray);
-    border-radius: 8px;
-    text-align: center;
+  width: 100%;
+  max-width: 700px;
+  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
 }
 
 /* Titres */
-.title   { font-size: 2rem;  font-weight: 700; letter-spacing: 0.08em; margin-bottom: 4px; }
-.subtitle{ font-size: .9rem; color: var(--fg-gray); margin-bottom: 24px; }
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.subtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--txt-muted);
+  margin-bottom: 2rem;
+}
 
 /* Champ DOB + bouton */
-.dob-block { margin-bottom: 24px; text-align: left; }
-.dob-block label { font-weight: 700; }
-#dob-input {
-    width: 100%;
-    margin: 6px 0 12px;
-    padding: 8px 6px;
-    font-family: inherit;
-    font-size: .9rem;
-    color: var(--accent);
-    background: var(--bg-black);
-    border: 1px solid var(--accent);
-    border-radius: 4px;
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: .9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #444;
 }
-#dob-input::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+input[type="date"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0); }
 
 .matix-button {
-    width: 100%;
-    padding: 10px 0;
-    border: 1px solid var(--accent);
-    background: transparent;
-    color: var(--accent);
-    font-weight: 700;
-    cursor: pointer;
-    transition: background .2s ease, color .2s ease;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease;
 }
-.matix-button:hover  { background: var(--fg-white); color: var(--bg-black); }
+.matix-button:hover { background: #000; }
 
 /* —— Grille —— */
 .life-grid {
-    display: grid;
-    grid-template-columns: repeat(52, var(--dot-size));
-    justify-content: center;           /* centre la grille dans le conteneur */
-    gap: var(--dot-gap);
-    margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(52, var(--dot-size));
+  justify-content: center;
+  gap: var(--dot-gap);
+  margin-top: 2rem;
 }
 
 /* Cercles */
 .dot {
-    width: var(--dot-size);
-    height: var(--dot-size);
-    border: 1px solid var(--fg-white);
-    border-radius: 50%;
-    background: var(--bg-black);
-    transition: background .15s ease;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border: 1px solid var(--txt-main);
+  border-radius: 50%;
+  background: #fff;                 /* cercle vide */
+  transition: background .15s ease;
 }
-.dot.filled { background: var(--fg-white); }
+.dot.filled { background: var(--primary); }  /* cercle rempli */
 
-/* Stats textuelles */
+/* Stats */
 .stats {
-    margin-top: 20px;
-    font-size: .85rem;
-    color: var(--fg-gray);
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
 }
 
 /* Footer */
 .footer {
-    margin-top: 16px;
-    text-align: center;
-    font-size: .8rem;
-    color: var(--fg-gray);
+  margin-top: auto;
+  padding: 2rem 0 0;
+  font-size: .85rem;
+  text-align: center;
+  color: #777;
 }
-.footer a { color: var(--fg-white); text-decoration: underline; }
-.footer a:hover { color: var(--fg-gray); }
+.footer a {
+  color: #000;
+  font-weight: 600;
+  text-decoration: none;
+}
+.footer a:hover { text-decoration: underline; }
+

@@ -1,139 +1,150 @@
-/* ——— Lifomatix – thème clair moderne ——— */
+/* ——— Lifomatix – thème minimal façon “less is more” ——— */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
 :root {
-  --bg-page:      #f8f8f8;
-  --bg-card:      #ffffff;
-  --txt-main:     #1a1a1a;
-  --txt-muted:    #555;
-  --border:       #ccc;
-  --primary:      #1a1a1a;
-  --radius:       12px;
+  /* Palette */
+  --bg-page:   #eeeeee;   /* gris clair du fond */
+  --bg-card:   #ffffff;
+  --txt-main:  #1a1a1a;   /* presque noir */
+  --txt-muted: #666666;
+  --accent:    #d8b445;   /* moutarde / ocre */
+
+  /* UI */
+  --radius: 12px;
+  --shadow: 0 2px 10px rgba(0,0,0,.06);
 
   /* Grille des semaines */
-  --dot-size: 11px;   /* cercle interne */
-  --dot-gap:  4px;    /* espace entre cercles */
+  --dot-size: 12px;
+  --dot-gap:  5px;
 }
 
 /* Reset minimal */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--bg-page);
-  color: var(--txt-main);
-  font-family: "Helvetica Neue", sans-serif;
-  padding: 2rem;
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  background:var(--bg-page);
+  color:var(--txt-main);
+  font-family:"Poppins",sans-serif;
+  padding:2rem;
 }
 
-/* —— Conteneur principal —— */
-.calculator-container {
-  width: 100%;
-  max-width: 700px;
-  padding: 2rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+/* ——— Carte principale ——— */
+.calculator-container{
+  width:100%;
+  max-width:720px;
+  padding:3rem 2rem;
+  background:var(--bg-card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
 }
 
 /* Titres */
-.title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 0.5rem;
+.title{
+  font-size:3rem;
+  font-weight:700;
+  letter-spacing:-.5px;
+  text-align:center;
+  margin-bottom:.25rem;
 }
-.subtitle {
-  text-align: center;
-  font-size: 1rem;
-  color: var(--txt-muted);
-  margin-bottom: 2rem;
-}
-
-/* Champ DOB + bouton */
-label {
-  display: block;
-  font-weight: bold;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-size: .9rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #444;
+.subtitle{
+  font-size:1.05rem;
+  font-weight:400;
+  color:var(--txt-muted);
+  text-align:center;
+  margin-bottom:2.5rem;
 }
 
-input[type="date"] {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: #fff;
+/* ——— Formulaire DOB + bouton ——— */
+label{
+  display:block;
+  font-size:.8rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.07rem;
+  margin-bottom:.4rem;
+  color:var(--txt-muted);
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0); }
-
-.matix-button {
-  width: 100%;
-  margin-top: 1rem;
-  padding: 0.9rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border: 0;
-  border-radius: var(--radius);
-  background: var(--primary);
-  color: #fff;
-  cursor: pointer;
-  transition: background .2s ease;
+input[type="date"]{
+  width:100%;
+  padding:.9rem 1.1rem;
+  font-size:1rem;
+  border:1px solid #ccc;
+  border-radius:var(--radius);
+  background:#fff;
 }
-.matix-button:hover { background: #000; }
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0);}
 
-/* —— Grille —— */
-.life-grid {
-  display: grid;
-  grid-template-columns: repeat(52, var(--dot-size));
-  justify-content: center;
-  gap: var(--dot-gap);
-  margin-top: 2rem;
+.matix-button{
+  width:100%;
+  margin-top:1.4rem;
+  padding:1rem 1.2rem;
+  font-size:1.05rem;
+  font-weight:700;
+  border:none;
+  border-radius:var(--radius);
+  background:var(--accent);
+  color:var(--txt-main);
+  cursor:pointer;
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.matix-button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+.matix-button:active{transform:translateY(0);}
+
+/* ——— Grille des cercles ——— */
+.life-grid{
+  display:grid;
+  grid-template-columns:repeat(52,var(--dot-size));
+  justify-content:center;
+  gap:var(--dot-gap);
+  margin-top:3rem;
 }
 
 /* Cercles */
-.dot {
-  width: var(--dot-size);
-  height: var(--dot-size);
-  border: 1px solid var(--txt-main);
-  border-radius: 50%;
-  background: #fff;                 /* cercle vide */
-  transition: background .15s ease;
+.dot{
+  width:var(--dot-size);
+  height:var(--dot-size);
+  border:1px solid var(--txt-main);
+  border-radius:50%;
+  background:transparent;          /* cercle vide */
+  transition:background .2s ease,border-color .2s ease;
 }
-.dot.filled { background: var(--primary); }  /* cercle rempli */
-
-/* Stats */
-.stats {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  border-radius: var(--radius);
-  background: var(--bg-card);
-  box-shadow: 0 2px 10px rgba(0,0,0,.05);
-  font-size: 1rem;
-  font-weight: 500;
-  text-align: center;
+.dot.filled{
+  background:var(--accent);        /* cercle rempli */
+  border-color:var(--accent);
 }
 
-/* Footer */
-.footer {
-  margin-top: auto;
-  padding: 2rem 0 0;
-  font-size: .85rem;
-  text-align: center;
-  color: #777;
+/* ——— Statistiques ——— */
+.stats{
+  margin-top:2.5rem;
+  padding:1.6rem 1.2rem;
+  text-align:center;
+  font-size:1rem;
+  font-weight:600;
+  border-radius:var(--radius);
+  background:var(--bg-card);
+  box-shadow:var(--shadow);
+  color:var(--txt-main);
 }
-.footer a {
-  color: #000;
-  font-weight: 600;
-  text-decoration: none;
-}
-.footer a:hover { text-decoration: underline; }
 
+/* ——— Footer ——— */
+.footer{
+  margin-top:auto;
+  padding:2rem 0 0;
+  font-size:.85rem;
+  text-align:center;
+  color:var(--txt-muted);
+}
+.footer a{
+  color:var(--txt-main);
+  font-weight:600;
+  text-decoration:none;
+}
+.footer a:hover{text-decoration:underline;}

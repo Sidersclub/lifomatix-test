@@ -1,61 +1,90 @@
-(() => {
-    const LIFE_EXPECTANCY_YEARS = 90;
-    const WEEKS_IN_YEAR = 52;
-    const TOTAL_WEEKS = LIFE_EXPECTANCY_YEARS * WEEKS_IN_YEAR;  // 4 680
-    const gridContainer = document.getElementById("grid-container");
-    const statsEl       = document.getElementById("stats");
-    const matixBtn      = document.getElementById("matix-btn");
-    const dobInput      = document.getElementById("dob-input");
+// Grab elements
+const paceSlider = document.getElementById("pace-slider");
+const paceDisplay = document.getElementById("running-pace");
+const speedDisplay = document.getElementById("speed-kmh");
+const finishDisplay = document.getElementById("finish-time");
+const distanceButtons = document.querySelectorAll(".distance-button");
+const saveButton = document.getElementById("save-goal");
 
-    /* ——— 1. Crée la grille une bonne fois pour toutes ——— */
-    function buildGrid () {
-        const frag = document.createDocumentFragment();
-        /*  
-            Pour avoir le remplissage “haut-droite ➜ bas-gauche”,
-            on crée chaque rangée de 52 cercles dans l’ordre inversé.
-        */
-        for (let row = 0; row < LIFE_EXPECTANCY_YEARS; row++) {
-            for (let col = WEEKS_IN_YEAR - 1; col >= 0; col--) {
-                const dot = document.createElement("div");
-                dot.className = "dot";
-                frag.appendChild(dot);
-            }
-        }
-        gridContainer.appendChild(frag);
-    }
+let selectedDistance = 5; // km – valeur par défaut
 
-    /* ——— 2. Calcule les semaines déjà vécues et colore ——— */
-    function matix () {
-        const dobValue = dobInput.value;
-        if (!dobValue) { alert("Entre ta date de naissance !"); return; }
+/* Helpers */
+const pad = (n) => String(n).padStart(2, "0");
 
-        const dob = new Date(dobValue);
-        const now = new Date();
+function secondsToPace(sec) {
+  const minutes = Math.floor(sec / 60);
+  const seconds = Math.round(sec % 60);
+  return `${pad(minutes)}:${pad(seconds)}`;
+}
 
-        if (dob > now) { alert("Tu n’es pas encore né !"); return; }
+function secondsToTime(sec) {
+  const hours = Math.floor(sec / 3600);
+  const minutes = Math.floor((sec % 3600) / 60);
+  const seconds = Math.floor(sec % 60);
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
 
-        /* Semaines vécues (arrondi : on garde la partie entière) */
-        const msPerWeek   = 1000 * 60 * 60 * 24 * 7;
-        const weeksLived  = Math.floor((now - dob) / msPerWeek);
-        const weeksClamped = Math.min(weeksLived, TOTAL_WEEKS);
+/* Mise à jour principale */
+function update() {
+  const sliderValue = parseInt(paceSlider.value, 10);
+  const paceSeconds = 180 + 3 * sliderValue; // 0‑100 → 3'00 à 8'00
 
-        /* Coloration progressive (optionnel : léger délai pour l’effet) */
-        const dots = gridContainer.children;
-        for (let i = 0; i < TOTAL_WEEKS; i++) {
-            const dot = dots[i];
-            dot.classList.toggle("filled", i < weeksClamped);
-        }
+  // Pace (affichage)
+  paceDisplay.textContent = `${secondsToPace(paceSeconds)} min/km`;
 
-        /* Stats textuelles */
-        const weeksRemaining = Math.max(TOTAL_WEEKS - weeksClamped, 0);
-        const yearsRemaining = weeksRemaining / WEEKS_IN_YEAR;
-        statsEl.textContent =
-            weeksClamped >= TOTAL_WEEKS
-                ? "Félicitations ! Tu as déjà dépassé les 90 ans ! 🎉"
-                : `Il te reste ~${weeksRemaining.toLocaleString("fr-FR")} semaines (${yearsRemaining.toFixed(1)} ans).`;
-    }
+  // Vitesse (km/h)
+  const speed = 3600 / paceSeconds;
+  speedDisplay.textContent = `${speed.toFixed(1)} km/h`;
 
-    /* ——— 3. Wiring ——— */
-    document.addEventListener("DOMContentLoaded", buildGrid);
-    matixBtn.addEventListener("click", matix);
-})();
+  // Temps final
+  const finishSeconds = selectedDistance * paceSeconds;
+  finishDisplay.textContent = secondsToTime(finishSeconds);
+}
+
+/* Distance buttons */
+distanceButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    distanceButtons.forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedDistance = parseFloat(btn.dataset.distance);
+    update();
+  });
+});
+
+/* Slider */
+paceSlider.addEventListener("input", update);
+
+/* Sauvegarde simple en localStorage */
+saveButton.addEventListener("click", () => {
+  const goal = {
+    distance: selectedDistance,
+    pace: paceDisplay.textContent,
+    time: finishDisplay.textContent,
+    date: new Date().toISOString(),
+  };
+  const goals = JSON.parse(localStorage.getItem("runtimeGoals") || "[]");
+  goals.push(goal);
+  localStorage.setItem("runtimeGoals", JSON.stringify(goals));
+  alert("Objectif enregistré !");
+});
+
+/* Petite animation orbitale */
+const orbitDot = document.getElementById("orbit-dot");
+let angle = 0;
+function animateOrbit() {
+  angle = (angle + 0.5) % 360;
+  const rad = (angle * Math.PI) / 180;
+  const cx = 150;
+  const cy = 75;
+  const rx = 120;
+  const ry = 30;
+  const x = cx + rx * Math.cos(rad);
+  const y = cy + ry * Math.sin(rad);
+  orbitDot.setAttribute("cx", x);
+  orbitDot.setAttribute("cy", y);
+  requestAnimationFrame(animateOrbit);
+}
+
+// Init
+update();
+animateOrbit();

@@ -1,177 +1,86 @@
-/* —— Palette —— */
-:root {
-  --accent: #DEBA52;   /* Jaune moutarde */
-  --bg:     #000000;   /* Noir terminal  */
-  --fg:     #F5F5F5;   /* Texte principal */
-  --fg-dim: #8E8E8E;   /* Texte secondaire */
-  --border: #555555;   /* Lignes UI */
+// Éléments
+const paceSlider = document.getElementById("pace-slider");
+const paceDisplay = document.getElementById("running-pace");
+const speedDisplay = document.getElementById("speed-kmh");
+const finishDisplay = document.getElementById("finish-time");
+const distanceButtons = document.querySelectorAll(".distance-button");
+const saveButton = document.getElementById("save-goal");
+
+let selectedDistance = 5; // km par défaut
+
+/* Helpers */
+const pad = (n) => String(n).padStart(2, "0");
+
+function secondsToPace(sec) {
+  const m = Math.floor(sec / 60);
+  const s = Math.round(sec % 60);
+  return `${pad(m)}:${pad(s)}`;
+}
+function secondsToTime(sec) {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = Math.floor(sec % 60);
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
 }
 
-/* —— Reset —— */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Calculs + affichage */
+function update() {
+  const sliderValue = parseInt(paceSlider.value, 10);
+  const paceSeconds = 180 + 3 * sliderValue; // 3'00 à 8'00
 
-/* —— Base —— */
-body {
-  font-family: "IBM Plex Mono", "Courier New", monospace;
-  background: var(--bg);
-  color: var(--fg);
-  padding: 20px;
-  letter-spacing: 0.4px;
-  -webkit-font-smoothing: antialiased;
-}
+  // Pace
+  paceDisplay.textContent = `${secondsToPace(paceSeconds)} min/km`;
 
-/* —— Conteneur principal —— */
-.calculator-container {
-  max-width: 480px;
-  margin: 40px auto 0;
-  padding: 24px 32px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  text-align: center;
+  // Vitesse
+  const speed = 3600 / paceSeconds;
+  speedDisplay.textContent = `${speed.toFixed(1)} km/h`;
+
+  // Temps final
+  const finishSeconds = selectedDistance * paceSeconds;
+  finishDisplay.textContent = secondsToTime(finishSeconds);
 }
 
-/* —— Titres —— */
-.title {
-  font-family: "Poppins", sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  margin-bottom: 4px;
-  position: relative;
-}
-.title::after {
-  content: "_";
-  margin-left: 6px;
-  color: var(--accent);
-  animation: blink 1s step-end infinite;
-}
-@keyframes blink { 50% { opacity: 0; } }
+/* Sélection distance */
+distanceButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    distanceButtons.forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedDistance = parseFloat(btn.dataset.distance);
+    update();
+  });
+});
 
-.subtitle {
-  font-size: 0.9rem;
-  color: var(--fg-dim);
-  margin-bottom: 28px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-}
+/* Slider */
+paceSlider.addEventListener("input", update);
 
-/* —— Animation orbitale —— */
-.orbit-container { width: 100%; height: 80px; margin-bottom: 24px; }
-#orbit-svg { width: 100%; height: 100%; }
-#orbit-svg ellipse { stroke: var(--fg-dim); fill: none; stroke-width: 2; }
-#orbit-dot { fill: var(--accent); }
+/* Sauvegarde simple */
+saveButton.addEventListener("click", () => {
+  const goal = {
+    distance: selectedDistance,
+    pace: paceDisplay.textContent,
+    time: finishDisplay.textContent,
+    date: new Date().toISOString(),
+  };
+  const goals = JSON.parse(localStorage.getItem("runtimeGoals") || "[]");
+  goals.push(goal);
+  localStorage.setItem("runtimeGoals", JSON.stringify(goals));
+  alert("Objectif enregistré !");
+});
 
-/* —— Boutons distance —— */
-.distance-buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 40px;
-}
-.distance-button {
-  flex: 1 1 22%;
-  padding: 10px 0;
-  font-size: 0.85rem;
-  border: 1px solid var(--accent);
-  background: transparent;
-  color: var(--accent);
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-.distance-button:hover,
-.distance-button.active {
-  background: var(--accent);
-  color: var(--bg);
-  font-weight: 700;
+/* Animation orbitale */
+const orbitDot = document.getElementById("orbit-dot");
+let angle = 0;
+function animateOrbit() {
+  angle = (angle + 0.5) % 360;
+  const rad = (angle * Math.PI) / 180;
+  const cx = 150, cy = 75, rx = 120, ry = 30;
+  const x = cx + rx * Math.cos(rad);
+  const y = cy + ry * Math.sin(rad);
+  orbitDot.setAttribute("cx", x);
+  orbitDot.setAttribute("cy", y);
+  requestAnimationFrame(animateOrbit);
 }
 
-/* —— Pace + slider —— */
-.pace-slider-container { margin-bottom: 28px; }
-.pace-label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
-#pace-slider {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 6px;
-  background: var(--fg-dim);
-  border-radius: 3px;
-  outline: none;
-  cursor: pointer;
-}
-#pace-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: 2px solid var(--bg);
-  margin-top: -6px;
-}
-#pace-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: 2px solid var(--bg);
-}
-
-/* —— Résultats —— */
-.result-container {
-  padding: 20px;
-  border: 1px dashed var(--border);
-  border-radius: 6px;
-}
-.result-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font-size: 0.9rem;
-}
-.result-item:last-child { margin-bottom: 0; }
-#speed-kmh, #finish-time {
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-
-/* —— Bouton enregistrer —— */
-.save-button {
-  width: 100%;
-  margin-top: 20px;
-  padding: 10px 0;
-  border: 1px solid var(--accent);
-  background: transparent;
-  color: var(--accent);
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-.save-button:hover   { background: var(--accent); color: var(--bg); }
-.save-button:active  { background: var(--fg-dim); color: var(--bg); }
-
-/* —— Footer —— */
-.footer {
-  margin-top: 24px;
-  text-align: center;
-  font-size: 0.8rem;
-  color: var(--fg-dim);
-}
-.footer a { color: var(--accent); text-decoration: none; }
-.footer a:hover { text-decoration: underline; }
-
-/* —— Highlight stabilo —— */
-.highlight { position: relative; display: inline-block; }
-.highlight::before {
-  content: "";
-  position: absolute;
-  left: -2px; right: -2px; bottom: 0.1em;
-  height: 55%;
-  background: var(--accent);
-  z-index: -1;
-  transform: skew(-3deg);
-}
+/* Init */
+update();
+animateOrbit();

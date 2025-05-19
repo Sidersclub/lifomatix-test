@@ -1,11 +1,10 @@
 /* —— Palette —— */
 :root {
   --accent: #DEBA52;   /* Jaune moutarde */
-  --black: #000000;    /* Noir intense   */
-  --gray-900: #2B2B2B; /* Gris anthracite */
-  --gray-600: #555555; /* Gris moyen      */
-  --gray-400: #8E8E8E; /* Gris clair      */
-  --white: #FFFFFF;    /* Blanc           */
+  --bg:     #000000;   /* Noir terminal  */
+  --fg:     #F5F5F5;   /* Texte principal */
+  --fg-dim: #8E8E8E;   /* Texte secondaire */
+  --border: #555555;   /* Lignes UI */
 }
 
 /* —— Reset —— */
@@ -13,11 +12,11 @@
 
 /* —— Base —— */
 body {
-  font-family: "Poppins", "Montserrat", sans-serif;
-  background: var(--white);
-  color: var(--gray-900);
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  background: var(--bg);
+  color: var(--fg);
   padding: 20px;
-  line-height: 1.5;
+  letter-spacing: 0.4px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -25,33 +24,42 @@ body {
 .calculator-container {
   max-width: 480px;
   margin: 40px auto 0;
-  padding: 32px;
-  background: var(--white);
-  border: 1px solid var(--gray-400);
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 24px 32px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
   text-align: center;
 }
 
 /* —— Titres —— */
 .title {
-  font-size: 2.2rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 2rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--black);
+  letter-spacing: 0.08em;
   margin-bottom: 4px;
+  position: relative;
 }
+.title::after {
+  content: "_";
+  margin-left: 6px;
+  color: var(--accent);
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
 .subtitle {
-  font-size: 0.95rem;
-  color: var(--gray-600);
+  font-size: 0.9rem;
+  color: var(--fg-dim);
   margin-bottom: 28px;
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing: 0.05em;
 }
 
 /* —— Animation orbitale —— */
 .orbit-container { width: 100%; height: 80px; margin-bottom: 24px; }
 #orbit-svg { width: 100%; height: 100%; }
-#orbit-svg ellipse { stroke: var(--gray-400); fill: none; stroke-width: 2; }
+#orbit-svg ellipse { stroke: var(--fg-dim); fill: none; stroke-width: 2; }
 #orbit-dot { fill: var(--accent); }
 
 /* —— Boutons distance —— */
@@ -64,18 +72,18 @@ body {
 .distance-button {
   flex: 1 1 22%;
   padding: 10px 0;
-  font-size: 0.9rem;
-  border: 1px solid var(--black);
-  background: var(--white);
-  color: var(--black);
+  font-size: 0.85rem;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
 .distance-button:hover,
 .distance-button.active {
   background: var(--accent);
-  color: var(--black);
-  font-weight: 600;
+  color: var(--bg);
+  font-weight: 700;
 }
 
 /* —— Pace + slider —— */
@@ -84,15 +92,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 12px;
-  color: var(--black);
 }
 #pace-slider {
   -webkit-appearance: none;
   width: 100%;
   height: 6px;
-  background: var(--gray-400);
+  background: var(--fg-dim);
   border-radius: 3px;
   outline: none;
   cursor: pointer;
@@ -103,7 +110,7 @@ body {
   height: 18px;
   border-radius: 50%;
   background: var(--accent);
-  border: 2px solid var(--black);
+  border: 2px solid var(--bg);
   margin-top: -6px;
 }
 #pace-slider::-moz-range-thumb {
@@ -111,16 +118,14 @@ body {
   height: 18px;
   border-radius: 50%;
   background: var(--accent);
-  border: 2px solid var(--black);
+  border: 2px solid var(--bg);
 }
 
 /* —— Résultats —— */
 .result-container {
   padding: 20px;
-  border: 1px solid var(--gray-400);
-  border-radius: 8px;
-  background: var(--gray-900);
-  color: var(--white);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
 }
 .result-item {
   display: flex;
@@ -129,8 +134,7 @@ body {
   font-size: 0.9rem;
 }
 .result-item:last-child { margin-bottom: 0; }
-#speed-kmh,
-#finish-time {
+#speed-kmh, #finish-time {
   font-size: 1.2rem;
   font-weight: 700;
 }
@@ -138,30 +142,36 @@ body {
 /* —— Bouton enregistrer —— */
 .save-button {
   width: 100%;
-  margin-top: 24px;
-  padding: 12px 0;
-  border: 1px solid var(--black);
-  background: var(--accent);
-  color: var(--black);
+  margin-top: 20px;
+  padding: 10px 0;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
   font-weight: 700;
   cursor: pointer;
-  transition: box-shadow 0.2s ease, transform 0.1s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
-.save-button:hover { box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); }
-.save-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
+.save-button:hover   { background: var(--accent); color: var(--bg); }
+.save-button:active  { background: var(--fg-dim); color: var(--bg); }
 
 /* —— Footer —— */
 .footer {
   margin-top: 24px;
   text-align: center;
   font-size: 0.8rem;
-  color: var(--gray-600);
+  color: var(--fg-dim);
 }
-.footer a {
-  color: var(--black);
-  text-decoration: underline;
+.footer a { color: var(--accent); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* —— Highlight stabilo —— */
+.highlight { position: relative; display: inline-block; }
+.highlight::before {
+  content: "";
+  position: absolute;
+  left: -2px; right: -2px; bottom: 0.1em;
+  height: 55%;
+  background: var(--accent);
+  z-index: -1;
+  transform: skew(-3deg);
 }
-.footer a:hover { color: var(--accent); }

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lifomatix – Life Calendar</title>
+    <link rel="stylesheet" href="lifomatix.css" />
+</head>
+<body>
+    <div class="calculator-container">
+        <h1 class="title">Lifomatix</h1>
+        <h2 class="subtitle">Combien de semaines te reste-t-il&nbsp;?</h2>
+
+        <!-- Date de naissance + bouton -->
+        <div class="dob-block">
+            <label for="dob-input">Date de naissance</label>
+            <input type="date" id="dob-input" />
+            <button id="matix-btn" class="matix-button">Matixer</button>
+        </div>
+
+        <!-- Grille des cercles -->
+        <div id="grid-container" class="life-grid"></div>
+
+        <!-- Compteurs textuels (facultatif) -->
+        <p id="stats" class="stats">&nbsp;</p>
+    </div>
+
+    <p class="footer">
+        Made with 🤍 by
+        <a href="https://www.linkedin.com/in/armanamini/" target="_blank" rel="noopener noreferrer">Arman</a>
+    </p>
+
+    <script src="lifomatix.js"></script>
+</body>
+</html>

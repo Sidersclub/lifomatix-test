@@ -1,0 +1,101 @@
+/* ——— Thème noir & blanc “terminal” ——— */
+:root {
+    --bg-black:  #0A0A0A;
+    --fg-white:  #F5F5F5;
+    --fg-gray:   #AAAAAA;
+    --accent:    #FFFFFF;
+    --grid-dim:  4680;          /* 90 ans × 52 semaines  */
+    --dot-size:  9px;           /* diamètre intérieur    */
+    --dot-gap:   3px;           /* espace entre cercles  */
+}
+
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: "Courier New", "IBM Plex Mono", monospace;
+    background: var(--bg-black);
+    color: var(--fg-white);
+    padding: 20px;
+    letter-spacing: 0.4px;
+}
+
+/* —— Conteneur principal —— */
+.calculator-container {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 24px;
+    background: var(--bg-black);
+    border: 1px solid var(--fg-gray);
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Titres */
+.title   { font-size: 2rem;  font-weight: 700; letter-spacing: 0.08em; margin-bottom: 4px; }
+.subtitle{ font-size: .9rem; color: var(--fg-gray); margin-bottom: 24px; }
+
+/* Champ DOB + bouton */
+.dob-block { margin-bottom: 24px; text-align: left; }
+.dob-block label { font-weight: 700; }
+#dob-input {
+    width: 100%;
+    margin: 6px 0 12px;
+    padding: 8px 6px;
+    font-family: inherit;
+    font-size: .9rem;
+    color: var(--accent);
+    background: var(--bg-black);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+}
+#dob-input::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+.matix-button {
+    width: 100%;
+    padding: 10px 0;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+.matix-button:hover  { background: var(--fg-white); color: var(--bg-black); }
+
+/* —— Grille —— */
+.life-grid {
+    display: grid;
+    grid-template-columns: repeat(52, var(--dot-size));
+    justify-content: center;           /* centre la grille dans le conteneur */
+    gap: var(--dot-gap);
+    margin-top: 28px;
+}
+
+/* Cercles */
+.dot {
+    width: var(--dot-size);
+    height: var(--dot-size);
+    border: 1px solid var(--fg-white);
+    border-radius: 50%;
+    background: var(--bg-black);
+    transition: background .15s ease;
+}
+.dot.filled { background: var(--fg-white); }
+
+/* Stats textuelles */
+.stats {
+    margin-top: 20px;
+    font-size: .85rem;
+    color: var(--fg-gray);
+}
+
+/* Footer */
+.footer {
+    margin-top: 16px;
+    text-align: center;
+    font-size: .8rem;
+    color: var(--fg-gray);
+}
+.footer a { color: var(--fg-white); text-decoration: underline; }
+.footer a:hover { color: var(--fg-gray); }
